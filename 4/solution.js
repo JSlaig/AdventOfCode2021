@@ -2,7 +2,8 @@ let input = require('fs').readFileSync('input', 'utf-8').split(/\r?\n/);
 
 input = input.map(String);
 
-var sequence = input[0];
+var sequence = input[0].split(",").map(Number);
+
 
 //Bingo board
 function Bingo (frow, srow, trow, frthrow, fthrow){
@@ -22,21 +23,21 @@ function Bingo (frow, srow, trow, frthrow, fthrow){
     this.fthcol = [frow[4], srow[4], trow[4], frthrow[4], fthrow[4]];
 
     //Sort and replace number in board
-    this.play = function(number) {
+    this.play = function(number) {        
         for(let i = 0; i < 5; i++){
-            if(this.frow[i] === number){
+            if(parseInt(this.frow[i]) === number){
                this.frow[i] = "X";
             }
-            if(this.srow[i] === number){
+            if(parseInt(this.srow[i]) === number){
                 this.srow[i] = "X";
             } 
-            if(this.trow[i] === number){
+            if(parseInt(this.trow[i]) === number){
                 this.trow[i] = "X";
             } 
-            if(this.frthrow[i] === number){
+            if(parseInt(this.frthrow[i]) === number){
                 this.frthrow[i] = "X";
             } 
-            if(this.fthrow[i] === number){
+            if(parseInt(this.fthrow[i]) === number){
                 this.fthrow[i] = "X";
             }  
         }
@@ -62,7 +63,7 @@ function Bingo (frow, srow, trow, frthrow, fthrow){
 
         for(let i = 0; i < 5; i++){
             if(this.frow[i] != "X"){
-                sum += parseInt(this.from[i]);
+                sum += parseInt(this.frow[i]);
             }
             if(this.srow[i] != "X"){
                 sum += parseInt(this.srow[i]);
@@ -93,17 +94,62 @@ function partA(){
 
     for(let i = 1; i < aux.length; i++){   
             
-            if(aux[i][0] === '') aux[i].shift();                         
-            bingoCollection.push(aux[i], aux[i + 1], aux[i + 2], aux[i + 3], aux[i + 4]);
+            if(aux[i][0] === '') aux[i].shift();  
+            
+            if(i % 6 == 1){
+                bingoCollection.push(new Bingo(aux[i], aux[i+1], aux[i+2], aux[i+3], aux[i+4]));
+            }
     }
-    console.log(input[40]);
-    console.log(aux[0][1]);
-    console.log(bingoCollection[40]);
+
+    let winner = false;
+
+    for(let i = 0; i < sequence.length; i++){  
+        if(winner == true){ 
+            break;
+        }else{
+
+            for(let j = 0; j < bingoCollection.length; j++){
+                bingoCollection[j].play(sequence[i]);
+
+                if(bingoCollection[j].getWinner() == true){
+                    console.log(bingoCollection[j].getScore() * sequence[i]);
+                    winner = true;
+                }
+            }
+        }
+    }
 }
 
 partA();
 
-function partB(){    
-}
+function partB(){ 
+    var bingoCollection = [];
+
+    let aux = [];
+
+    for(let i = 1; i < input.length; i++){
+        aux.push(input[i].split(/\s+/g));       
+    }
+
+    for(let i = 1; i < aux.length; i++){   
+            
+            if(aux[i][0] === '') aux[i].shift();  
+            
+            if(i % 6 == 1){
+                bingoCollection.push(new Bingo(aux[i], aux[i+1], aux[i+2], aux[i+3], aux[i+4]));
+            }
+    }
+
+    for(let i = 0; i < sequence.length; i++){  
+            for(let j = 0; j < bingoCollection.length; j++){
+                bingoCollection[j].play(sequence[i]);
+
+                if(bingoCollection[j].getWinner() == true){
+                    console.log(bingoCollection[j].getScore() * sequence[i]);
+                }
+            }
+    }
+}   
+
 
 partB();
