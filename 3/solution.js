@@ -66,8 +66,8 @@ function partA(){
 partA();
 
 function partB(){
-    let ones = "";
-    let zeros = "";
+    let ones;
+    let zeros;
     let aux = input;
     let aux2 = input;
 
@@ -83,45 +83,45 @@ function partB(){
                 zeros += aux[i];
             }
         }
+
+        aux = null;
         
-        if(ones.length > aux.length / 2){ 
-            aux = null;          
+        if(ones.length > zeros.length){                       
             aux = ones.match(/.{1,12}/g);          
-        }else if(zeros.length > aux.length / 2){ 
-            aux = null;           
+        }else if(ones.length < zeros.length){                        
             aux = zeros.match(/.{1,12}/g);
         }else{
-            aux = null;
             aux = ones.match(/.{1,12}/g);
         }
     } 
+
+    
 
     for(let j = 0; j < 12; j++){
 
         ones = "";
         zeros = "";
+        
+        if(aux2.length > 1){
+            for(let i = 0; i < aux2.length; i++){
+                if(aux2[i].charAt(j) === "1"){
+                    ones += aux2[i];
+                }else{
+                    zeros += aux2[i];
+                }
+            } 
+            
+            aux2 = null;
 
-        for(let i = 0; i < aux2.length; i++){
-            if(aux2[i].charAt(j) === "1"){
-                ones += aux2[i];
+            if(ones.length < zeros.length){        
+                aux2 = ones.match(/.{1,12}/g);
+            }else if(ones.length > zeros.length){
+                aux2 = zeros.match(/.{1,12}/g);
             }else{
-                zeros += aux2[i];
+                aux2 = zeros.match(/.{1,12}/g);
             }
         }
-        
-        if(ones.length < aux2.length / 2){ 
-            aux2 = null;          
-            aux2 = ones.match(/.{1,12}/g);          
-        }else if(zeros.length < aux2.length / 2){ 
-            aux2 = null;           
-            aux2 = zeros.match(/.{1,12}/g);
-        }else{
-            aux2 = null;
-            aux2 = zeros.match(/.{1,12}/g);
-        }
-    } 
-    
-   
+    }
 
     console.log(parseInt(aux[0], 2) * parseInt(aux2[0], 2))
 }
