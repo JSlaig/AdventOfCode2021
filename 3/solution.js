@@ -60,7 +60,7 @@ function partA(){
         }
     }
 
-    //console.log(parseInt(gamma, 2) * parseInt(epsilon, 2))
+    console.log(parseInt(gamma, 2) * parseInt(epsilon, 2))
 }
 
 partA();
