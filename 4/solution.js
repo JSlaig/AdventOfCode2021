@@ -22,6 +22,8 @@ function Bingo (frow, srow, trow, frthrow, fthrow){
     this.frthcol = [frow[3], srow[3], trow[3], frthrow[3], fthrow[3]];
     this.fthcol = [frow[4], srow[4], trow[4], frthrow[4], fthrow[4]];
 
+    this.winner = false;
+
     //Sort and replace number in board
     this.play = function(number) {        
         for(let i = 0; i < 5; i++){
@@ -40,21 +42,39 @@ function Bingo (frow, srow, trow, frthrow, fthrow){
             if(parseInt(this.fthrow[i]) === number){
                 this.fthrow[i] = "X";
             }  
+              if(parseInt(this.fcol[i]) === number){
+               this.fcol[i] = "X";
+            }
+            if(parseInt(this.scol[i]) === number){
+                this.scol[i] = "X";
+            } 
+            if(parseInt(this.tcol[i]) === number){
+                this.tcol[i] = "X";
+            } 
+            if(parseInt(this.frthcol[i]) === number){
+                this.frthcol[i] = "X";
+            } 
+            if(parseInt(this.fthcol[i]) === number){
+                this.fthcol[i] = "X";
+            }
         }
     };
 
     //Check the conditions to win
     this.getWinner = function() {
-        let win = false;
+        return this.winner;
+    }
 
-        for(let i = 0; i < 5; i++){
+    //Set the winner
+    this.setWinner = function(){
+         for(let i = 0; i < 5; i++){
             if(this.frow[i] === "X" && this.srow[i] === "X" && this.trow[i] === "X" && this.frthrow[i] === "X" && this.fthrow[i] === "X"){
-                win = true;
-            }else if(this.fcol[i] === "X" && this.scol[i] === "X" && this.tcol[i] === "X" && this.frthcol[i] === "X" && this.fthcol[i] === "X"){
-                win = true;
+                this.winner = true;
+            }
+            if(this.fcol[i] === "X" && this.scol[i] === "X" && this.tcol[i] === "X" && this.frthcol[i] === "X" && this.fthcol[i] === "X"){
+                this.winner = true;
             }
         }
-        return win;
     }
 
     //Get the score of the board
@@ -102,14 +122,16 @@ function partA(){
     }
 
     let winner = false;
-
     for(let i = 0; i < sequence.length; i++){  
         if(winner == true){ 
             break;
+
         }else{
 
             for(let j = 0; j < bingoCollection.length; j++){
+
                 bingoCollection[j].play(sequence[i]);
+                bingoCollection[j].setWinner();
 
                 if(bingoCollection[j].getWinner() == true){
                     console.log(bingoCollection[j].getScore() * sequence[i]);
@@ -120,7 +142,7 @@ function partA(){
     }
 }
 
-partA();
+//partA();
 
 function partB(){ 
     var bingoCollection = [];
@@ -139,16 +161,31 @@ function partB(){
                 bingoCollection.push(new Bingo(aux[i], aux[i+1], aux[i+2], aux[i+3], aux[i+4]));
             }
     }
-
+    
+    let winnerNumber = 0;
+    let sequenceNumber = 0;
+    
     for(let i = 0; i < sequence.length; i++){  
-            for(let j = 0; j < bingoCollection.length; j++){
-                bingoCollection[j].play(sequence[i]);
 
-                if(bingoCollection[j].getWinner() == true){
-                    console.log(bingoCollection[j].getScore() * sequence[i]);
+        
+            for(let j = 0; j < bingoCollection.length; j++){
+
+                if(bingoCollection[j].getWinner() == false){ 
+                    bingoCollection[j].play(sequence[i]);
+                    bingoCollection[j].setWinner();
+
+                    if(bingoCollection[j].getWinner() == true){
+                        winnerNumber = j;
+                        sequenceNumber = sequence[i];                       
+                    }
                 }
-            }
+            }      
     }
+   
+    console.log(winnerNumber);
+    console.log(sequenceNumber)
+    console.log(bingoCollection[winnerNumber])
+    console.log(bingoCollection[winnerNumber].getScore() * sequenceNumber);
 }   
 
 
